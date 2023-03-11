@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CHANGE BROWSER THEME -->
+    <meta name="theme-color" content="#059be5">
+    <title>حالة البطارية</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+</head>
+
+<body>
+
+    <!-- ############################################# -->
+    <!-- ################## NAVBAR ################### -->
+    <!-- ############################################# -->
+
+    <nav>
+        <header>
+            <div class="links">
+                <ul>
+                    <a href="https://www.facebook.com/SabahAltaj"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.twitter.com/sabbah_dev"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.github.com/sabbbah"><i class="fab fa-github"></i></a>
+                </ul>
+            </div>
+            <div class="brand">
+                <img class="brandImage" src="logoBlue.png" alt="">
+            </div>
+        </header>
+    </nav>
+
+    <!-- ############################################# -->
+    <!-- ################ ALL CONTENT ################ -->
+    <!-- ############################################# -->
+    <div class="content">
+        <div class="info">
+            <p>نسبة شحن بطارية جهازك</p>
+            <span class="battery"></span>
+        </div>
+
+        <p class="status"></p>
+    </div>
+
+    <!-- ############################################# -->
+    <!-- ################## FOOTER ################### -->
+    <!-- ############################################# -->
+    <footer>
+        <p>&copy; تمت برمجته بواسطة <span>صبَّاح التاج</span> <b id="year"></b></p>
+    </footer>
+
+    <!-- ############################################# -->
+    <!-- ################## SCRIPT ################### -->
+    <!-- ############################################# -->
+    <script>
+        let battery = document.querySelector(".battery");
+        let status = document.querySelector(".status");
+        let name = document.querySelector("footer span");
+        let socialMediaIcons = document.querySelectorAll("a i");
+        let year = document.getElementById("year");
+        let blue = "#059be5";
+        let yellow = "#e3ab00";
+
+        let date = new Date();
+        year.innerHTML = date.getFullYear();
+
+        // ===========================================================
+        // ==================== GET BATTERY LEVEL ====================
+        // ===========================================================
+        let indexOfDot, batteryLevel;
+
+        setInterval(() => {
+            navigator.getBattery().then((full) => {
+                indexOfDot = full.level.toString().indexOf(".");
+                batteryLevel = full.level.toString().slice(indexOfDot + 1);
+
+                // if (batteryLevel.length === 1) {
+                //     console.log("1");
+                // }
+                battery.innerHTML = `${batteryLevel}${"%"}`;
+                if (full.charging) {
+                    battery.style.color = blue;
+                    status.style.backgroundColor = blue;
+                    name.style.color = blue;
+                    status.style.color = "#eee";
+                    status.innerHTML = `<span class="material-symbols-outlined">power</span> يتم الشحن الآن`;
+                    document.querySelector(".brandImage").src = "logoBlue.png";
+                    
+                    // SOICAL MEDIA ICONS HOVER
+                    socialMediaIcons.forEach((icon) => {
+                        icon.addEventListener("mouseenter", (eve) => {
+                            eve.target.style = `color: ${blue}`;
+                        });
+                        icon.addEventListener("mouseleave", (eve) => {
+                            eve.target.style = "color: #222";
+                        });
+                    })
+                } else {
+                    battery.style.color = `${yellow}`;
+                    status.style.backgroundColor = `${yellow}`;
+                    name.style.color = yellow;
+                    status.style.color = "#eee";
+                    status.innerHTML = `<span class="material-symbols-outlined">power_off</span>تم فصل الشاحن`;
+                    document.querySelector(".brandImage").src = "logoYellow.png";
+
+                    // SOICAL MEDIA ICONS HOVER
+                    socialMediaIcons.forEach((icon) => {
+                        icon.addEventListener("mouseenter", (eve) => {
+                            eve.target.style = `color: ${yellow}`;
+                        });
+                        icon.addEventListener("mouseleave", (eve) => {
+                            eve.target.style = "color: #222";
+                        });
+                    })
+                }
+            });
+        }, 500);
+
+
+        let num = 0;
+        navigator.getBattery().then((full) => {
+            indexOfDot = full.level.toString().indexOf(".");
+            batteryLevel = full.level.toString().slice(indexOfDot + 1);
+            // return batteryLevel;
+            // console.log(batteryLevel);
+            function iterating() {
+                num++;
+                if (num >= batteryLevel) {
+                    clearInterval(handler);
+                }
+                // console.log(num);
+                battery.innerHTML = `${num}${"%"}`;
+            }
+            const handler = setInterval(iterating, 50);
+        })
+
+    </script>
+
+
+</body>
+
+</html>
