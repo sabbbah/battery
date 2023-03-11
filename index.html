@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- CHANGE BROWSER THEME -->
-    <meta name="theme-color" content="#059be5">
     <title>حالة البطارية</title>
 
     <!-- CSS -->
@@ -86,11 +84,17 @@
                 indexOfDot = full.level.toString().indexOf(".");
                 batteryLevel = full.level.toString().slice(indexOfDot + 1);
 
-                // if (batteryLevel.length === 1) {
-                //     console.log("1");
-                // }
+               
+//                 If the battery level is = single number
+                if (batteryLevel.length === 1) {
+                    batteryLevel = `${batteryLevel}0`;
+                }
+                
+                
                 battery.innerHTML = `${batteryLevel}${"%"}`;
                 if (full.charging) {
+                    // CHANGE BROWSER THEME
+                    document.querySelector("head").append(`<meta name="theme-color" content="${blue}">`);
                     battery.style.color = blue;
                     status.style.backgroundColor = blue;
                     name.style.color = blue;
@@ -108,6 +112,7 @@
                         });
                     })
                 } else {
+                    document.querySelector("head").append(`<meta name="theme-color" content="${yellow}">`);
                     battery.style.color = `${yellow}`;
                     status.style.backgroundColor = `${yellow}`;
                     name.style.color = yellow;
